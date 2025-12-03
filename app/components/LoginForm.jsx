@@ -1,7 +1,11 @@
 "use client";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState } from "react";
 
 const LoginForm = () => {
+  const [data, setData] = useState({});
   const {
     register,
     handleSubmit,
@@ -12,6 +16,7 @@ const LoginForm = () => {
   } = useForm({
     defaultValues: {
       socials: [{ url: "" }],
+      dob: new Date(),
     },
   });
 
@@ -22,7 +27,11 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log(data?.dob.toISOString().split("T")[0]);
+    console.log(data?.photo[0]);
+    console.log(data?.photos);
     console.log(data);
+    setData(data);
     // reset();
   };
 
@@ -140,23 +149,101 @@ const LoginForm = () => {
             className="mr-1"
             type="radio"
             name="subjects"
-            id="bangla"
-            value="bangla"
+            id="CSE"
+            value="CSE"
             {...register("subjects")}
           />
-          <label htmlFor="bangla" className="mr-2">
-            bangla
+          <label htmlFor="CSE" className="mr-2">
+            CSE
           </label>
           <input
             className="mr-1"
             type="radio"
             name="subjects"
-            id="english"
-            value="english"
+            id="EEE"
+            value="EEE"
             {...register("subjects")}
           />
-          <label htmlFor="english">english</label>
+          <label htmlFor="EEE" className="mr-2">
+            EEE
+          </label>
         </div>
+        <div className="flex gap-2">
+          <label>
+            <input type="checkbox" value="HTML" {...register("skills")} /> HTML
+          </label>
+
+          <label>
+            <input type="checkbox" value="CSS" {...register("skills")} /> CSS
+          </label>
+
+          <label>
+            <input type="checkbox" value="React" {...register("skills")} />
+            React
+          </label>
+        </div>
+        <div>
+          <label className="block mb-1">Select Date of Birth</label>
+          <Controller
+            name="dob"
+            control={control}
+            rules={{ required: "Date of birth is required" }}
+            render={({ field }) => (
+              <DatePicker
+                placeholderText="Select date"
+                className="border p-2 rounded"
+                selected={field?.value}
+                showYearDropdown
+                showMonthDropdown
+                onChange={(data) => field?.onChange(data)}
+              />
+            )}
+          />
+          {errors?.dob && (
+            <p className="text-red-500">{errors?.dob?.message}</p>
+          )}
+        </div>
+        <input
+          type="file"
+          className="px-2 py-1 rounded border"
+          {...register("photo", { required: "photo is required" })}
+        />
+        {errors?.photo && (
+          <p className="text-red-500">{errors?.photo?.message}</p>
+        )}
+        <p className="font-bold underline">Multiple photo upload</p>
+        <input
+          className="px-2 py-1 rounded border"
+          type="file"
+          multiple
+          {...register("photos", { required: "Photos are required" })}
+        />
+        {errors?.photos && (
+          <p className="text-red-500">{errors?.photos?.message}</p>
+        )}
+        <p className="font-bold underline">Favorite Color</p>
+        <input
+          className="block w-64"
+          type="color"
+          {...register("favoriteColor", {
+            required: "Favorite color is required",
+          })}
+        />
+        {errors?.favoriteColor && (
+          <p className="text-red-500">{errors?.favoriteColor?.message}</p>
+        )}
+        <p className="font-bold underline">Select Range</p>
+        <input
+          className="w-64"
+          min={0}
+          max={100}
+          type="range"
+          {...register("range", { required: "Range is required" })}
+        />
+        {errors?.range && (
+          <p className="text-red-500">{errors?.range?.message}</p>
+        )}
+
         <button
           className="bg-green-500 text-white py-2 px-6 text-center rounded-lg w-full"
           type="submit"
@@ -165,6 +252,12 @@ const LoginForm = () => {
           {isSubmitting ? "Submitting..." : "Login"}
         </button>
       </form>
+      <div className="mt-10 w-3/4 mx-auto">
+        <h3 className="text-xl font-bold mb-2">Form Data:</h3>
+        <pre className="bg-gray-100 p-4 rounded">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 };
