@@ -42,7 +42,7 @@ const LoginForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-2 w-3/4 mx-auto mt-10"
       >
-        <h2 className="text-2xl font-bold mb-4">Login Form</h2>
+        <h2 className="text-2xl font-bold mb-4">React Form</h2>
         <input
           className="border p-2 rounded block w-full"
           type="email"
