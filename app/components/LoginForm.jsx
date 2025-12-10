@@ -32,7 +32,7 @@ const LoginForm = () => {
     console.log(data?.photos);
     console.log(data);
     setData(data);
-    // reset();
+    reset();
   };
 
   const password = watch("password");
